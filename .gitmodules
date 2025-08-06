@@ -1,0 +1,3 @@
+[submodule "ForgeC"]
+	path = ForgeC
+	url = https://github.com/A-Boring-Square/ForgeC.git
