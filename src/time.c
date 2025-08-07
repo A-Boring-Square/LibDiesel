@@ -1,7 +1,8 @@
 #include "time.h"
 #include "_export.h"
+#include "platform.h"
 
-#ifdef _WIN32
+#ifdef DISTRO_WIN32
     #include <winsock2.h>
     #include <ws2tcpip.h>
     #pragma comment(lib, "ws2_32.lib")
@@ -15,7 +16,7 @@
 #define NTP_TIMESTAMP_DELTA 2208988800U
 
 DIESEL_API value_t get_time_from_time_server(string_t ntp_server_ip) {
-#ifdef _WIN32
+#ifdef DISTRO_WIN32
     WSADATA wsa;
     if (WSAStartup(MAKEWORD(2,2), &wsa) != 0) {
         return (value_t){
@@ -33,7 +34,7 @@ DIESEL_API value_t get_time_from_time_server(string_t ntp_server_ip) {
 
     sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sockfd < 0) {
-#ifdef _WIN32
+#ifdef DISTRO_WIN32
         WSACleanup();
 #endif
         return (value_t){
@@ -46,7 +47,7 @@ DIESEL_API value_t get_time_from_time_server(string_t ntp_server_ip) {
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(123);
     if (inet_pton(AF_INET, ntp_server_ip, &server_addr.sin_addr) <= 0) {
-#ifdef _WIN32
+#ifdef DISTRO_WIN32
         closesocket(sockfd);
         WSACleanup();
 #else
@@ -60,7 +61,7 @@ DIESEL_API value_t get_time_from_time_server(string_t ntp_server_ip) {
 
     if (sendto(sockfd, buffer, sizeof(buffer), 0,
                (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
-#ifdef _WIN32
+#ifdef DISTRO_WIN32
         closesocket(sockfd);
         WSACleanup();
 #else
@@ -73,7 +74,7 @@ DIESEL_API value_t get_time_from_time_server(string_t ntp_server_ip) {
     }
 
     struct sockaddr_in src_addr;
-#ifdef _WIN32
+#ifdef DISTRO_WIN32
     int addr_len = sizeof(src_addr);
 #else
     socklen_t addr_len = sizeof(src_addr);
@@ -81,7 +82,7 @@ DIESEL_API value_t get_time_from_time_server(string_t ntp_server_ip) {
 
     if (recvfrom(sockfd, buffer, sizeof(buffer), 0,
                  (struct sockaddr*)&src_addr, &addr_len) < 0) {
-#ifdef _WIN32
+#ifdef DISTRO_WIN32
         closesocket(sockfd);
         WSACleanup();
 #else
@@ -93,7 +94,7 @@ DIESEL_API value_t get_time_from_time_server(string_t ntp_server_ip) {
         };
     }
 
-#ifdef _WIN32
+#ifdef DISTRO_WIN32
     closesocket(sockfd);
     WSACleanup();
 #else
