@@ -38,7 +38,7 @@ DIESEL_API FILE* open_file(string_t path, bool read, bool write, bool append, bo
 
 DIESEL_API void close_file(FILE* file_handle);
 
-DIESEL_API string_t read_file_into_string_buffer(FILE* file_handle, string_t stack_buffer, size_t buffer_size);
+DIESEL_API string_t read_file_into_string_buffer(FILE* file_handle, char* buffer, size_t buffer_size);
 
 
 #endif // LIB_DIESEL_FILESYSTEM_H

@@ -31,8 +31,8 @@ DIESEL_API void close_file(FILE* file_handle) {
     fclose(file_handle);
 }
 
-DIESEL_API string_t read_file_into_string_buffer(FILE* file_handle, string_t stack_buffer, size_t buffer_size) {
-    if (!file_handle || !stack_buffer || buffer_size == 0) return NULL;
+DIESEL_API string_t read_file_into_string_buffer(FILE* file_handle, char* buffer, size_t buffer_size) {
+    if (!file_handle || !buffer || buffer_size == 0) return NULL;
 
     fseek(file_handle, 0, SEEK_END);
     long size = ftell(file_handle);
@@ -50,8 +50,8 @@ DIESEL_API string_t read_file_into_string_buffer(FILE* file_handle, string_t sta
 
     heap_buffer[size] = '\0';
 
-    memcpy(stack_buffer, heap_buffer, size + 1);
+    memcpy(buffer, heap_buffer, size + 1);
     free(heap_buffer);
 
-    return stack_buffer;
+    return buffer;
 }
