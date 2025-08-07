@@ -1,9 +1,9 @@
 #ifdef _WIN32
   #ifdef WIN_EXPORT
-    #define EXPORT __declspec(dllexport)
+    #define DIESEL_API __declspec(dllexport)
   #else
-    #define EXPORT __declspec(dllimport)
+    #define DIESEL_API __declspec(dllimport)
   #endif
 #else
-  #define EXPORT __attribute__((visibility("default")))
+  #define DIESEL_API __attribute__((visibility("default")))
 #endif

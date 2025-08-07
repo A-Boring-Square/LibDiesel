@@ -14,7 +14,7 @@
 
 #define NTP_TIMESTAMP_DELTA 2208988800U
 
-EXPORT value_t get_time_from_time_server(const char *ntp_server_ip) {
+DIESEL_API value_t get_time_from_time_server(string_t ntp_server_ip) {
 #ifdef _WIN32
     WSADATA wsa;
     if (WSAStartup(MAKEWORD(2,2), &wsa) != 0) {
@@ -110,4 +110,59 @@ EXPORT value_t get_time_from_time_server(const char *ntp_server_ip) {
         .kind = VALUE_UINT,
         .u = unix_time
     };
+}
+
+DIESEL_API int seconds_to_minutes(int seconds) {
+ return (int)(seconds / 60);
+}
+
+DIESEL_API int seconds_to_hours(int seconds) {
+ return (int)(seconds / 3600);
+}
+
+DIESEL_API int minutes_to_seconds(int minutes) {
+ return (int)(minutes * 60);
+}
+
+DIESEL_API int minutes_to_hours(int minutes) {
+ return (int)(minutes / 60);
+}
+
+DIESEL_API int hours_to_seconds(int hours) {
+ return (int)(hours * 3600);
+}
+
+DIESEL_API int hours_to_minutes(int hours) {
+ return (int)(hours * 60);
+}
+
+DIESEL_API int hours_to_days(int hours) {
+    return (int)(hours / 24);
+}
+
+DIESEL_API int days_to_hours(int days) {
+    return (int)(days * 24);
+}
+
+DIESEL_API Time unix_time_to_utc(uint64_t timestamp) {
+    uint64_t seconds_in_day = timestamp % 86400; // seconds since midnight UTC
+
+    Time t;
+    t.hour = (int)(seconds_in_day / 3600);
+    t.minute = (int)((seconds_in_day % 3600) / 60);
+    t.second = (int)(seconds_in_day % 60);
+    t.millisecond = 0;
+
+    return t;
+}
+
+DIESEL_API void apply_utc_offset(Time* time, int offset) {
+    time->hour += offset;
+
+    // Normalize hour to 0-23 range
+    if (time->hour < 0) {
+        time->hour += 24;
+    } else if (time->hour >= 24) {
+        time->hour -= 24;
+    }
 }
