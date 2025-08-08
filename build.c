@@ -7,9 +7,11 @@ int main() {
     forgec_select_compiler(build_enviroment, "gcc");
     forgec_add_include_dir(build_enviroment, "include");
     forgec_add_source_files_from_dir(build_enviroment, "src");
+    forgec_add_compiler_arg(build_enviroment, "-Wno-discarded-qualifiers");
 
     #ifdef _WIN32
         forgec_add_compiler_arg(build_enviroment, "-lws2_32");
+        forgec_add_compiler_arg(build_enviroment, "-ldbghelp");
         forgec_build_shared(build_enviroment, "LibDiesel.dll", DEBUG_BUILD);
         system("mkdir Build\\include");
         system("xcopy include Build\\include /E /I /Y");
