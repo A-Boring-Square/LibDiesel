@@ -16,10 +16,12 @@ int main() {
         system("mkdir Build\\include");
         system("xcopy include Build\\include /E /I /Y");
     #elif defined(__APPLE__)
+        forgec_add_compiler_arg(build_enviroment, "-fPIC");
         forgec_build_shared(build_enviroment, "LibDiesel.dylib", DEBUG_BUILD);
         system("mkdir -p Build/include");
         system("cp -r include/* Build/include");
     #else
+        forgec_add_compiler_arg(build_enviroment, "-fPIC");
         forgec_build_shared(build_enviroment, "LibDiesel.so", DEBUG_BUILD);
         system("mkdir -p Build/include");
         system("cp -r include/* Build/include");
