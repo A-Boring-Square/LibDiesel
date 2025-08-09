@@ -86,7 +86,7 @@
 
 // Unknown platform fallback
 #else
-    #error "Unknown platform: please define PLAT and DISTRO for this target"
+    #error "Unknown platform: please make a pull request and define PLAT and DISTRO for this target"
 #endif
 
 #endif // LIB_DIESEL_PLATFORM_H
