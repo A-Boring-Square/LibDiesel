@@ -147,35 +147,6 @@ typedef struct { double value; } gradians_t;
  */
 typedef struct { double value; } turns_t;
 
-/**
- * @brief Represents a time duration in seconds.
- */
-typedef struct { double value; } seconds_t;
-
-/**
- * @brief Represents a time duration in milliseconds.
- */
-typedef struct { double value; } milliseconds_t;
-
-/**
- * @brief Represents a time duration in microseconds.
- */
-typedef struct { double value; } microseconds_t;
-
-/**
- * @brief Represents a time duration in minutes.
- */
-typedef struct { double value; } minutes_t;
-
-/**
- * @brief Represents a time duration in hours.
- */
-typedef struct { double value; } hours_t;
-
-/**
- * @brief Represents a time duration in days.
- */
-typedef struct { double value; } days_t;
 
 /**
  * @brief Represents a speed in meters per second.
@@ -409,61 +380,6 @@ DIESEL_API turns_t degrees_to_turns(degrees_t d);
  */
 DIESEL_API degrees_t turns_to_degrees(turns_t t);
 
-/**
- * @brief Convert seconds to milliseconds.
- * @param s Time in seconds.
- * @return Time in milliseconds.
- */
-DIESEL_API milliseconds_t seconds_to_milliseconds(seconds_t s);
-
-/**
- * @brief Convert milliseconds to seconds.
- * @param ms Time in milliseconds.
- * @return Time in seconds.
- */
-DIESEL_API seconds_t milliseconds_to_seconds(milliseconds_t ms);
-
-/**
- * @brief Convert seconds to minutes.
- * @param s Time in seconds.
- * @return Time in minutes.
- */
-DIESEL_API minutes_t seconds_to_minutes(seconds_t s);
-
-/**
- * @brief Convert minutes to seconds.
- * @param m Time in minutes.
- * @return Time in seconds.
- */
-DIESEL_API seconds_t minutes_to_seconds(minutes_t m);
-
-/**
- * @brief Convert seconds to hours.
- * @param s Time in seconds.
- * @return Time in hours.
- */
-DIESEL_API hours_t seconds_to_hours(seconds_t s);
-
-/**
- * @brief Convert hours to seconds.
- * @param h Time in hours.
- * @return Time in seconds.
- */
-DIESEL_API seconds_t hours_to_seconds(hours_t h);
-
-/**
- * @brief Convert hours to days.
- * @param h Time in hours.
- * @return Time in days.
- */
-DIESEL_API days_t hours_to_days(hours_t h);
-
-/**
- * @brief Convert days to hours.
- * @param d Time in days.
- * @return Time in hours.
- */
-DIESEL_API hours_t days_to_hours(days_t d);
 
 /**
  * @brief Convert meters per second to kilometers per hour.

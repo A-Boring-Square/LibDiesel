@@ -40,17 +40,6 @@ DIESEL_API gradians_t degrees_to_gradians(degrees_t d) { return (gradians_t){ d.
 DIESEL_API turns_t degrees_to_turns(degrees_t d) { return (turns_t){ d.value / 360.0 }; }
 DIESEL_API degrees_t turns_to_degrees(turns_t t) { return (degrees_t){ t.value * 360.0 }; }
 
-// =============================
-// Time Conversions
-// =============================
-DIESEL_API milliseconds_t seconds_to_milliseconds(seconds_t s) { return (milliseconds_t){ s.value * 1000.0 }; }
-DIESEL_API seconds_t milliseconds_to_seconds(milliseconds_t ms) { return (seconds_t){ ms.value / 1000.0 }; }
-DIESEL_API minutes_t seconds_to_minutes(seconds_t s) { return (minutes_t){ s.value / 60.0 }; }
-DIESEL_API seconds_t minutes_to_seconds(minutes_t m) { return (seconds_t){ m.value * 60.0 }; }
-DIESEL_API hours_t seconds_to_hours(seconds_t s) { return (hours_t){ s.value / 3600.0 }; }
-DIESEL_API seconds_t hours_to_seconds(hours_t h) { return (seconds_t){ h.value * 3600.0 }; }
-DIESEL_API days_t hours_to_days(hours_t h) { return (days_t){ h.value / 24.0 }; }
-DIESEL_API hours_t days_to_hours(days_t d) { return (hours_t){ d.value * 24.0 }; }
 
 // =============================
 // Speed Conversions
