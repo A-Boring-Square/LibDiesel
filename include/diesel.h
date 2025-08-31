@@ -31,11 +31,13 @@
 
 
 
-/* --------------------------------------------------------------------------
+/*
+--------------------------------------------------------------------------
    CONFIGURATION
    Define LIBDIESEL_MIN_BUILD before including this header to exclude
    heavier modules for smaller builds.
--------------------------------------------------------------------------- */
+--------------------------------------------------------------------------
+*/
 
 #ifndef LIBDIESEL_MIN_BUILD
 
@@ -48,6 +50,7 @@
 #include "types.h"      /* Fundamental and extended types         */
 #include "units.h"      /* Strongly-typed unit conversions        */
 #include "threading.h"  /* Cross platform multi-threading         */
+#include "patch.h"      /* Runtime dynamic library loader         */
 
 #else /* LIBDIESEL_MIN_BUILD */
 
