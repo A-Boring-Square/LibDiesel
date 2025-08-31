@@ -8,6 +8,7 @@ int main() {
     forgec_add_include_dir(build_enviroment, "include");
     forgec_add_source_files_from_dir(build_enviroment, "src");
     forgec_add_compiler_arg(build_enviroment, "-Wno-discarded-qualifiers");
+    forgec_add_compiler_arg(build_enviroment, "-DWIN_EXPORT");
 
 
     #ifdef _WIN32
