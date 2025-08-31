@@ -11,7 +11,7 @@
 #ifdef DISTRO_WIN32
 
 /**
- * @brief Normalize a file path by converting all '/' characters to '\\' on Windows.
+ * @brief Normalize a file path by converting all '/' characters to '\\\' on Windows.
  * This macro modifies the input string in place.
  *
  * @param path The file path string to normalize.

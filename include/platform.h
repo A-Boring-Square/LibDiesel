@@ -31,6 +31,33 @@
  * If the platform cannot be determined, a preprocessor error is triggered.
  */
 
+
+
+#if defined(__clang__) || defined(__GNUC__)
+/**
+ * @brief Prints a message to the terminal during compilation (GCC/Clang).
+ * @param msg The message to print.
+ */
+    #define COMP_MSG(msg) _Pragma(_LIBDIESEL_STRINGIFY(message msg))
+
+#elif defined(_MSC_VER)
+/**
+ * @brief Prints a message to the terminal during compilation (MSVC).
+ * @param msg The message to print.
+ */
+    #define COMP_MSG(msg) __pragma(message(msg))
+
+#else
+/**
+ * @brief Fallback when compiler message pragmas aren't supported.
+ * @param msg The message to print.
+ */
+    #define COMP_MSG(msg)
+#endif
+
+
+
+
 // Windows platform detection
 #if defined(_WIN32) || defined(_WIN64)
     #define PLAT_WINDOWS
