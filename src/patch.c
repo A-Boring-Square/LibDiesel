@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "patch.h"
-#include "_export.h"
+#include "memory.h"
 #include "filesystem.h"
 
 #if !defined(DISTRO_WIN32)
@@ -13,7 +13,9 @@
 #include <unistd.h>
 #endif
 
-
+/* -------------------------------------------------------------------------- */
+/* Cross-platform dynamic library helpers                                      */
+/* -------------------------------------------------------------------------- */
 void* load_library(const char *path) {
 #if defined(_WIN32)
     return (void*)LoadLibraryA(path);
@@ -39,7 +41,12 @@ void close_library(void *handle) {
 #endif
 }
 
-DIESEL_API Patch load_patch(const char *path, const char **symbol_names, size_t symbol_count) {
+/* -------------------------------------------------------------------------- */
+/* Load a single patch                                                         */
+/* -------------------------------------------------------------------------- */
+DIESEL_API Patch load_patch(const char *path, const char **symbol_names, size_t symbol_count, allocator_t *alloc) {
+    alloc = alloc ? alloc : &default_allocator;
+
     Patch p = {0};
     p.handle = load_library(path);
     if (!p.handle) {
@@ -47,12 +54,12 @@ DIESEL_API Patch load_patch(const char *path, const char **symbol_names, size_t 
         return p;
     }
 
-    p.symbols = malloc(sizeof(char*) * symbol_count);
-    p.funcs   = malloc(sizeof(void*) * symbol_count);
-    p.count = symbol_count;
+    p.symbols = ALLOC(alloc, sizeof(char*) * symbol_count);
+    p.funcs   = ALLOC(alloc, sizeof(void*) * symbol_count);
+    p.count   = symbol_count;
 
     for (size_t i = 0; i < symbol_count; i++) {
-        p.symbols[i] = strdup(symbol_names[i]);
+        p.symbols[i] = REALLOC_STRDUP(alloc, symbol_names[i]);
         p.funcs[i] = get_symbol(p.handle, symbol_names[i]);
         if (!p.funcs[i]) {
             fprintf(stderr, "Symbol %s not found in %s\n", symbol_names[i], path);
@@ -62,19 +69,32 @@ DIESEL_API Patch load_patch(const char *path, const char **symbol_names, size_t 
     return p;
 }
 
-DIESEL_API void unload_patch(Patch *p) {
+/* -------------------------------------------------------------------------- */
+/* Unload a patch and free memory                                              */
+/* -------------------------------------------------------------------------- */
+DIESEL_API void unload_patch(Patch *p, allocator_t *alloc) {
     if (!p || !p->handle) return;
-    for (size_t i = 0; i < p->count; i++) free(p->symbols[i]);
-    free(p->symbols);
-    free(p->funcs);
+    alloc = alloc ? alloc : &default_allocator;
+
+    for (size_t i = 0; i < p->count; i++) {
+        if (p->symbols[i]) FREE(alloc, p->symbols[i]);
+    }
+    FREE(alloc, p->symbols);
+    FREE(alloc, p->funcs);
+
     close_library(p->handle);
     p->handle = NULL;
 }
 
-DIESEL_API Patch* load_all_patches(const char **symbol_names, size_t symbol_count, size_t *out_count) {
+/* -------------------------------------------------------------------------- */
+/* Load all patches in PATCH_FOLDER                                            */
+/* -------------------------------------------------------------------------- */
+DIESEL_API Patch* load_all_patches(const char **symbol_names, size_t symbol_count, size_t *out_count, allocator_t *alloc) {
+    alloc = alloc ? alloc : &default_allocator;
+
     size_t capacity = 8;
     size_t n = 0;
-    Patch *patches = malloc(sizeof(Patch) * capacity);
+    Patch *patches = ALLOC(alloc, sizeof(Patch) * capacity);
 
 #if defined(_WIN32)
     WIN32_FIND_DATAA ffd;
@@ -91,13 +111,13 @@ DIESEL_API Patch* load_all_patches(const char **symbol_names, size_t symbol_coun
     do {
         if (n >= capacity) {
             capacity *= 2;
-            patches = realloc(patches, sizeof(Patch) * capacity);
+            patches = REALLOC(alloc, patches, sizeof(Patch) * (capacity / 2), sizeof(Patch) * capacity);
         }
         char fullpath[512];
         snprintf(fullpath, sizeof(fullpath), "%s\\%s",
                  PATCH_FOLDER[0] != '\0' ? PATCH_FOLDER : ".", ffd.cFileName);
         _NORMALIZE_FILE_PATH(fullpath);
-        patches[n++] = load_patch(fullpath, symbol_names, symbol_count);
+        patches[n++] = load_patch(fullpath, symbol_names, symbol_count, alloc);
     } while (FindNextFileA(hFind, &ffd) != 0);
     FindClose(hFind);
 #else
@@ -115,13 +135,13 @@ DIESEL_API Patch* load_all_patches(const char **symbol_names, size_t symbol_coun
 
         if (n >= capacity) {
             capacity *= 2;
-            patches = realloc(patches, sizeof(Patch) * capacity);
+            patches = REALLOC(alloc, patches, sizeof(Patch) * (capacity / 2), sizeof(Patch) * capacity);
         }
 
         char fullpath[512];
         snprintf(fullpath, sizeof(fullpath), "%s/%s",
                  PATCH_FOLDER[0] != '\0' ? PATCH_FOLDER : ".", entry->d_name);
-        patches[n++] = load_patch(fullpath, symbol_names, symbol_count);
+        patches[n++] = load_patch(fullpath, symbol_names, symbol_count, alloc);
     }
 
     closedir(dir);

@@ -41,14 +41,15 @@ typedef struct {
  * @param symbol_count Number of symbols in symbol_names
  * @return A Patch struct containing the loaded library and function pointers
  */
-DIESEL_API Patch load_patch(const char *path, const char **symbol_names, size_t symbol_count);
+DIESEL_API Patch load_patch(const char *path, const char **symbol_names, size_t symbol_count, allocator_t *alloc);
+
 
 /**
  * @brief Unload a previously loaded patch and free its resources.
  *
  * @param p Pointer to the Patch struct to unload
  */
-DIESEL_API void unload_patch(Patch *p);
+DIESEL_API void unload_patch(Patch *p, allocator_t *alloc);
 
 /**
  * @brief Load all shared libraries from the patch folder.
@@ -61,6 +62,5 @@ DIESEL_API void unload_patch(Patch *p);
  * @param out_count Pointer to size_t to store the number of loaded patches
  * @return Dynamically allocated array of Patch structs
  */
-DIESEL_API Patch* load_all_patches(const char **symbol_names, size_t symbol_count, size_t *out_count);
-
+DIESEL_API Patch* load_all_patches(const char **symbol_names, size_t symbol_count, size_t *out_count, allocator_t *alloc);
 #endif // LIB_DIESEL_PATCH_H

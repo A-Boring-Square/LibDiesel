@@ -59,7 +59,6 @@
  * @return FILE* A file handle on success, or NULL on failure.
  */
 DIESEL_API FILE* open_file(string_t path, bool read, bool write, bool append, bool create_if_not_exist);
-
 /**
  * @brief Close an opened file handle.
  *
@@ -76,6 +75,8 @@ DIESEL_API void close_file(FILE* file_handle);
  * @param buffer_size The maximum number of bytes to read.
  * @return string_t Pointer to the buffer containing file contents.
  */
-DIESEL_API string_t read_file_into_string_buffer(FILE* file_handle, char* buffer, size_t buffer_size);
+DIESEL_API string_t read_file_into_string_buffer(FILE* file_handle, char* buffer, size_t buffer_size, allocator_t* alloc);
+
+DIESEL_API char* read_file_to_heap(FILE* file_handle, allocator_t* alloc);
 
 #endif // LIB_DIESEL_FILESYSTEM_H
