@@ -7,13 +7,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Platform-specific macro to trigger a debugger breakpoint.
  * On Windows, calls __debugbreak().
  * On GCC/Clang, uses __builtin_trap().
  * Otherwise, sends SIGTRAP signal to the process.
  */
-#if defined(DISTRO_WIN32)
+#if defined(DISTRO_WIN32) || defined(_MSC_VER)
     #define DEBUG_BREAK() __debugbreak()
 #elif defined(__GNUC__) || defined(__clang__)
     #define DEBUG_BREAK() __builtin_trap()
@@ -94,5 +98,9 @@ DIESEL_API void log_info(string_t msg);
  * @param msg The message to log.
  */
 DIESEL_API void log_debug(string_t msg);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

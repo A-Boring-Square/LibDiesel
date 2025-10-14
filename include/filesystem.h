@@ -8,10 +8,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef DISTRO_WIN32
 
 /**
- * @brief Normalize a file path by converting all '/' characters to '\\\' on Windows.
+ * @brief Normalize a file path by converting all '/' characters to '\' on Windows.
  * This macro modifies the input string in place.
  *
  * @param path The file path string to normalize.
@@ -78,5 +82,9 @@ DIESEL_API void close_file(FILE* file_handle);
 DIESEL_API string_t read_file_into_string_buffer(FILE* file_handle, char* buffer, size_t buffer_size, allocator_t* alloc);
 
 DIESEL_API char* read_file_to_heap(FILE* file_handle, allocator_t* alloc);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // LIB_DIESEL_FILESYSTEM_H

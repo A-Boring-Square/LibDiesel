@@ -5,6 +5,10 @@
 #include "platform.h"
 #include "_export.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if defined(DISTRO_WIN32)
 #include <windows.h>
 #endif
@@ -63,4 +67,9 @@ DIESEL_API void unload_patch(Patch *p, allocator_t *alloc);
  * @return Dynamically allocated array of Patch structs
  */
 DIESEL_API Patch* load_all_patches(const char **symbol_names, size_t symbol_count, size_t *out_count, allocator_t *alloc);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif // LIB_DIESEL_PATCH_H

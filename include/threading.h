@@ -5,6 +5,10 @@
 #include "platform.h"
 #include "_export.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if defined(DISTRO_WIN32)
 #include <Windows.h>
 
@@ -82,5 +86,9 @@ DIESEL_API void mutex_unlock(mutex_t* mutex);
  * @return void
  */
 DIESEL_API void mutex_destroy(mutex_t* mutex);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // LIB_DIESEL_THREADING_H

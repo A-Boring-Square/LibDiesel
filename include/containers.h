@@ -9,15 +9,15 @@ extern "C" {
 #endif
 
 /* -------------------------- Vector Definition Macro ------------------------ */
-#define VECTOR_DEFINE(T, Name)                                                \
-typedef struct {                                                              \
+#define VECTOR_DEFINE(T, Name)                                                 \
+typedef struct {                                                               \
     T *data;                                                                   \
     size_t length;                                                             \
     size_t capacity;                                                           \
     allocator_t *alloc;                                                        \
 } Name;                                                                        \
                                                                                \
-static inline void Name##_init(Name *vec, allocator_t *alloc) {               \
+static inline void Name##_init(Name *vec, allocator_t *alloc) {                \
     vec->data = NULL;                                                          \
     vec->length = 0;                                                           \
     vec->capacity = 0;                                                         \
@@ -25,7 +25,7 @@ static inline void Name##_init(Name *vec, allocator_t *alloc) {               \
 }                                                                              \
                                                                                \
 static inline void Name##_free(Name *vec) {                                    \
-    if (vec->data) FREE(vec->alloc, vec->data);                                 \
+    if (vec->data) FREE(vec->alloc, vec->data);                                \
     vec->data = NULL;                                                          \
     vec->length = 0;                                                           \
     vec->capacity = 0;                                                         \
@@ -84,7 +84,7 @@ static inline void Name##_init(Name *list, allocator_t *alloc) {               \
     list->head = NULL;                                                         \
     list->tail = NULL;                                                         \
     list->length = 0;                                                          \
-    list->alloc = alloc ? alloc : &default_allocator;                           \
+    list->alloc = alloc ? alloc : &default_allocator;                          \
 }                                                                              \
                                                                                \
 static inline void Name##_free(Name *list) {                                   \
@@ -137,7 +137,7 @@ static inline bool Name##_pop_front(Name *list, T *out) {                      \
     return true;                                                               \
 }                                                                              \
                                                                                \
-static inline void Name##_delete(Name *list) {                                  \
+static inline void Name##_delete(Name *list) {                                 \
     if (list->alloc && list->alloc->free_all) {                                \
         FREE_ALL(list->alloc);                                                 \
     } else {                                                                   \
@@ -152,6 +152,7 @@ static inline void Name##_delete(Name *list) {                                  
     list->tail = NULL;                                                         \
     list->length = 0;                                                          \
 }
+
 
 #ifdef __cplusplus
 }

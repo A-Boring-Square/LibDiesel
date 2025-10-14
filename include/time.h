@@ -5,6 +5,10 @@
 #include "types.h" // for value_t, error_t, etc.
 #include "_export.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define UTC_PLUS_0  0
 #define UTC_PLUS_1  1
 #define UTC_PLUS_2  2
@@ -144,5 +148,9 @@ DIESEL_API Time unix_time_to_utc(uint64_t timestamp);
  * @note Does not affect minutes, seconds, or milliseconds.
  */
 DIESEL_API void apply_utc_offset(Time* time, int offset);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // LIB_DIESEL_TIME_H

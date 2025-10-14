@@ -7,6 +7,10 @@
 // Strong typedefs
 // =============================
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Represents a distance in millimeters.
  */
@@ -521,6 +525,8 @@ DIESEL_API terabytes_t gigabytes_to_terabytes(gigabytes_t gb);
  */
 DIESEL_API gigabytes_t terabytes_to_gigabytes(terabytes_t tb);
 
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif // LIB_DIESEL_UNITS_H
